@@ -1,0 +1,12 @@
+.scrollprt::-moz-scrollbar{
+display: none;
+}
+.scrollprt::-webkit-scrollbar{
+    display: none;
+    }
+    .scrollbarhome::-moz-scrollbar{
+        display: none;
+    }
+    .scrollbar::-webkit-scrollbar{
+        display: none;
+    }
