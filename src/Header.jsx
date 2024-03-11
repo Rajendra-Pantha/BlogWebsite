@@ -3,9 +3,46 @@ import { Link, NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
 const Header = () => {
   const [isClicked, setIsClicked] = useState(false);
+  const[isloginbtnclicked,setIsloginbtnclicked]=useState(false);
+  const[logininfo,setLogininfo]=useState({uname:'',upassword:''});
+  const[err,setErr]=useState("");
+  const[err1,setErr1]=useState("");
   const togglebtn = () => {
     setIsClicked(!isClicked);
   };
+  const handleLogin=()=>{
+    setIsloginbtnclicked(!isloginbtnclicked);
+  }
+  const handleChange = (e) => {
+    setLogininfo(prevState=>({...prevState,[e.target.name]: e.target.value}));
+}
+const handleSubbmit=(e)=>{
+  e.preventDefault();
+ if(logininfo.uname.length===0){
+  setErr("username cannot be empty");
+  return;
+ }
+ if(logininfo.uname.length<3){
+  setErr("username cannot be less than 3");
+  return;
+ }
+ setErr("");
+ if(logininfo.upassword.length===0){
+  setErr1("password cannot be empty");
+  return;
+ }
+ if(logininfo.upassword.length<=8){
+  setErr1("password must be atleast 8 digit");
+  return;
+ }
+ console.log("Submitted")
+
+ 
+ setErr1("");
+ setLogininfo({
+  uname:'',upassword:''
+ })
+}
   return (
     <div className="fixed top-0 left-0 right-0">
       <div className=" w-screen h-14 bg-black text-white flex items-center justify-between px-8 ">
@@ -57,7 +94,7 @@ const Header = () => {
         </div>
 
         <div className="md:flex gap-2 h-full items-center hidden">
-          <button className="bg-gray-300 rounded px-4 py-1 text-yellow-800 font-bold hover:bg-gray-200">
+          <button onClick={handleLogin} className="bg-gray-300 rounded px-4 py-1 text-yellow-800 font-bold hover:bg-gray-200">
             Login
           </button>
           <Icon
@@ -130,7 +167,7 @@ const Header = () => {
             Service
           </NavLink>
           <div className="flex gap-4 pt-4">
-            <button className="bg-yellow-700 rounded px-4 py-2 text-gray-200 font-bold w-24">
+            <button onClick={handleLogin} className="bg-yellow-700 rounded px-4 py-2 text-gray-200 font-bold w-24">
               Login
             </button>
             <button className="bg-yellow-700 rounded px-4 py-2 text-gray-200 font-bold w-24">
@@ -145,11 +182,35 @@ const Header = () => {
           <NavLink to="/blogs">Blogs</NavLink>
           <NavLink to="/contact">Contact</NavLink>
           <NavLink to="/service">Service</NavLink>
-          <button className="bg-yellow-700 rounded px-4 py-2 text-gray-200 font-bold w-24">
+          <button  className="bg-yellow-700 rounded px-4 py-2 text-gray-200 font-bold w-24">
             Login
           </button>
         </div>
       )}
+      
+     { isloginbtnclicked?( <div className='p-8 w-96 bg-gray-200 my-14 md:my-64 mx-auto rounded'>
+           <form onSubmit={handleSubbmit}>
+            <div className="flex gap-6 mb-1">
+            <label className="font-semibold text-lg ">Username</label>
+            <input name="uname" value={logininfo.uname} onChange={handleChange} className="rounded p-2 focus:outline-none placeholder:p-2" type="text" placeholder="Enter your username"/>
+            </div>
+            <p className="mb-4 text-red-700 text-sm">{err}</p>
+            <div className="flex gap-8 mb-1">
+            <label className="font-semibold text-lg">Password</label>
+            <input name="upassword" value={logininfo.upassword} onChange={handleChange} className="rounded p-2 focus:outline-none placeholder:p-2" type="password" placeholder="Enter your password"/>
+            </div>
+            <p className="mb-6 text-red-700 text-sm">{err1}</p>
+            <div className="flex justify-center gap-4">
+              <button  className="font-semibold text-lg bg-yellow-600 text-white rounded px-4 py-2 hover:bg-yellow-500" type="submit" >Login</button> 
+              <button onClick={handleLogin} className="font-semibold text-lg bg-yellow-600 text-white rounded px-4 py-2 hover:bg-yellow-500"  >Cancel</button>
+            </div>
+            
+             
+           
+           </form>
+      </div>):(<div className='p-8 w-96 bg-gray-200 my-64 mx-auto rounded hidden'>
+          
+      </div>)}
     </div>
   );
 };
